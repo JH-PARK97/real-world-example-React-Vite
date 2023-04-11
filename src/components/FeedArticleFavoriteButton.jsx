@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { clickFavoriteButton, clickUnFavoriteButton } from "../api/API";
+import { clickFavoriteButton } from "../api/API";
 
 const FeedArticleFavoriteButton = ({ favoritesCount, favorited, slug }) => {
   const [count, setCount] = useState(favoritesCount);
   const [favorite, setFavorite] = useState(favorited);
 
-
   const ClickFavoriteButton = async () => {
     if (favorite) {
       try {
-        const result = await clickUnFavoriteButton(slug);
+        const result = await clickFavoriteButton(slug, "delete");
         console.log(result);
         setFavorite(result.data.article.favorited);
         setCount(result.data.article.favoritesCount);
@@ -19,7 +18,7 @@ const FeedArticleFavoriteButton = ({ favoritesCount, favorited, slug }) => {
       }
     } else {
       try {
-        const result = await clickFavoriteButton(slug);
+        const result = await clickFavoriteButton(slug, "post");
         console.log(result);
         setFavorite(result.data.article.favorited);
         setCount(result.data.article.favoritesCount);

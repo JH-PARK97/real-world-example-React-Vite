@@ -8,7 +8,7 @@ const ArticleMeta = ({ articleDetail, favorite, count, ClickFavoriteButton, Clic
   const { userProfile } = useOutletContext();
 
   // const canUpdate = userProfile.username === articleDetail.author.username;
-  const canUpdate = true;
+  const canUpdate = false;
 
   return (
     <div className="article-meta">

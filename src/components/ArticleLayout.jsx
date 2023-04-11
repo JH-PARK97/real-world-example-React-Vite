@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import ArticleMeta from "../components/ArticleMeta";
-import { clickFavoriteButton, clickFollowButton, clickUnFavoriteButton, clickUnfollowButton } from "../api/API";
+import { clickFavoriteButton, clickFollowButton } from "../api/API";
 
 const ArticleLayout = () => {
   const articleDetail = useLoaderData().data.article;
@@ -13,7 +13,7 @@ const ArticleLayout = () => {
   const ClickFavoriteButton = async () => {
     if (favorite) {
       try {
-        const result = await clickUnFavoriteButton(articleDetail.slug);
+        const result = await clickFavoriteButton(articleDetail.slug, "delete");
         setFavorite(result.data.article.favorited);
         setCount(result.data.article.favoritesCount);
       } catch (e) {
@@ -22,7 +22,7 @@ const ArticleLayout = () => {
       }
     } else {
       try {
-        const result = await clickFavoriteButton(articleDetail.slug);
+        const result = await clickFavoriteButton(articleDetail.slug, "post");
         setFavorite(result.data.article.favorited);
         setCount(result.data.article.favoritesCount);
       } catch (e) {
@@ -35,7 +35,7 @@ const ArticleLayout = () => {
   const ClickFollowButton = async () => {
     if (following) {
       try {
-        const result = await clickUnfollowButton(articleDetail.author.username);
+        const result = await clickFollowButton(articleDetail.author.username, "delete");
         setFollowing(result.data.profile.following);
       } catch (e) {
         console.log(e);
@@ -43,7 +43,7 @@ const ArticleLayout = () => {
       }
     } else {
       try {
-        const result = await clickFollowButton(articleDetail.author.username);
+        const result = await clickFollowButton(articleDetail.author.username, "post");
         setFollowing(result.data.profile.following);
       } catch (e) {
         console.log(e);

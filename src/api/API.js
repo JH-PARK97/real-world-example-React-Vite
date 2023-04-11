@@ -1,4 +1,3 @@
-import axios from "axios";
 import { API_ENDPOINTS } from "../constants/constants";
 import instance from "../utils/interceptor";
 
@@ -34,17 +33,20 @@ export const getCommentsList = async ({ request, params }) => {
 export const getProfile = async () => {
   try {
     const response = await instance.get(API_ENDPOINTS.USER.ROOT);
-
+    console.log(response);
     return response;
   } catch (error) {
-    console.log(error);
+    if (error.response.status === 401) {
+      console.log("로그인 안한 상태");
+      return error;
+    }
     return error;
   }
 };
 
-export const clickFavoriteButton = async (slug) => {
+export const clickFavoriteButton = async (slug, method) => {
   try {
-    const response = await instance.post(API_ENDPOINTS.ARTICLE.FAVORITE.DETAIL(slug));
+    const response = await instance[method](API_ENDPOINTS.ARTICLE.FAVORITE.DETAIL(slug));
     const favorited = response.data.article.favorited;
     console.log("clickFavoriteButton 클릭");
     console.log(favorited);
@@ -55,33 +57,9 @@ export const clickFavoriteButton = async (slug) => {
   }
 };
 
-export const clickUnFavoriteButton = async (slug) => {
+export const clickFollowButton = async (username, method) => {
   try {
-    const response = await instance.delete(API_ENDPOINTS.ARTICLE.FAVORITE.DETAIL(slug));
-    const favorited = response.data.article.favorited;
-    console.log("clickUnFavoriteButton 클릭");
-    console.log(favorited);
-    return response;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
-
-export const clickFollowButton = async (username) => {
-  try {
-    const response = await instance.post(API_ENDPOINTS.PROFILES.FOLLOW(username));
-    console.log(response);
-    return response;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
-
-export const clickUnfollowButton = async (username) => {
-  try {
-    const response = await instance.delete(API_ENDPOINTS.PROFILES.FOLLOW(username));
+    const response = await instance[method](API_ENDPOINTS.PROFILES.FOLLOW(username));
     console.log(response);
     return response;
   } catch (error) {

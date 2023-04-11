@@ -8,10 +8,7 @@ import { getArticlesDetail, getTagsList, getArticlesList, getCommentsList, getPr
 import HomeLayout from "./components/HomeLayout";
 import ArticleComments from "./components/ArticleComments";
 import { PAGE_ENDPOINTS } from "./constants/constants";
-import handleArticleSubmit from "./actions/handleEditorAction";
-import handleSettingsAction from "./actions/handleSettingsAction";
-import handleLoginAction from "./actions/handleLoginAction";
-import handleRegisterAction from "./actions/handleRegisterAction";
+import { handleArticleSubmit, handleSettingsAction, handleLoginAction, handleRegisterAction } from "./actions";
 
 const App = () => {
   const router = createBrowserRouter(
