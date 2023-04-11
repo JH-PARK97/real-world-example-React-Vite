@@ -18,7 +18,7 @@ export const getArticlesList = async (ctx) => {
 };
 
 export const getArticlesDetail = async ({ params }) => {
-  return await instance.get(`${API_ENDPOINTS.ARTICLE.DETAIL(params.slug)}`);
+  return await instance.get(`${API_ENDPOINTS.ARTICLE.DETAIL(params.slug ? params.slug : "")}`);
 };
 
 export const getTagsList = async () => {

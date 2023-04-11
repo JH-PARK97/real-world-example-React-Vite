@@ -189,17 +189,15 @@ const App = () => {
                   }
                 }
               }
-
-              if (error instanceof Error) {
-              }
-              return console.log("error");
             }
+            return null;
           }}
           element={<Register />}
         />
         <Route path={PAGE_ENDPOINTS.PROFILE} element={<Profile />} />
         <Route
           path={PAGE_ENDPOINTS.EDITOR}
+          loader={getArticlesDetail}
           action={async (ctx) => {
             const formData = await ctx.request.formData();
             const title = formData.get("title");
@@ -207,6 +205,8 @@ const App = () => {
             const body = formData.get("body");
             const tags = formData.get("tags ");
             const errors = {};
+
+            console.log("ctx.params : ", ctx.params.slug);
 
             if (typeof title !== "string" || !title) {
               errors.title = "title이 공백입니다.";
@@ -223,33 +223,66 @@ const App = () => {
               return json(errors);
             }
 
-            try {
-              const response = await instance.post(API_ENDPOINTS.ARTICLE.ROOT, {
-                article: {
-                  title,
-                  description,
-                  body,
-                  tags,
-                },
-              });
-              console.log("response : ", response);
-              if (response.status === 200) {
-                return redirect(`/article/${response.data.article.slug}`);
+            if (!ctx.params.slug) {
+              try {
+                const response = await instance.post(API_ENDPOINTS.ARTICLE.ROOT, {
+                  article: {
+                    title,
+                    description,
+                    body,
+                    tags,
+                  },
+                });
+                console.log("response : ", response);
+                if (response.status === 200) {
+                  return redirect(`/article/${response.data.article.slug}`);
+                }
+              } catch (e) {
+                if (axios.isAxiosError(e)) {
+                  switch (e.response.status) {
+                    case 422:
+                      const axiosError = e.response.data.errors;
+                      if (axiosError) {
+                        Object.keys(axiosError).map((key) => {
+                          if (axiosError[key]) {
+                            errors[key] = axiosError[key][0];
+                          }
+                        });
+                        return json(errors);
+                      }
+                      break;
+                  }
+                }
               }
-            } catch (e) {
-              if (axios.isAxiosError(e)) {
-                switch (e.response.status) {
-                  case 422:
-                    const axiosError = e.response.data.errors;
-                    if (axiosError) {
-                      Object.keys(axiosError).map((key) => {
-                        if (axiosError[key]) {
-                          errors[key] = "중복되는 title입니다.";
-                        }
-                      });
-                      return json(errors);
-                    }
-                    break;
+            } else {
+              try {
+                const response = await instance.put(API_ENDPOINTS.ARTICLE.DETAIL(ctx.params.slug), {
+                  article: {
+                    title,
+                    description,
+                    body,
+                    tags,
+                  },
+                });
+                console.log("response : ", response);
+                if (response.status === 200) {
+                  return redirect(`/article/${response.data.article.slug}`);
+                }
+              } catch (e) {
+                if (axios.isAxiosError(e)) {
+                  switch (e.response.status) {
+                    case 422:
+                      const axiosError = e.response.data.errors;
+                      if (axiosError) {
+                        Object.keys(axiosError).map((key) => {
+                          if (axiosError[key]) {
+                            errors[key] = "중복되는 title입니다.";
+                          }
+                        });
+                        return json(errors);
+                      }
+                      break;
+                  }
                 }
               }
             }

@@ -45,7 +45,7 @@ export const PAGE_ENDPOINTS = {
     LOGIN: '/login',
     REGIS: '/register',
   },
-  EDITOR: '/editor',
+  EDITOR: '/editor/:slug?',
   SETTINGS: "/settings",
   PROFILE: "/profile/:username",
   ARTICLE: "/article/:slug",

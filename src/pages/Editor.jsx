@@ -1,9 +1,13 @@
 import React from "react";
-import { Form, useActionData } from "react-router-dom";
+import { Form, useActionData, useLoaderData } from "react-router-dom";
 import TagsInput from "../components/TagsInput";
+import { useFetcher } from "react-router-dom";
 
 const Editor = () => {
   const errors = useActionData();
+  const articleUpdateData = useLoaderData().data.article;
+  const fetcher = useFetcher();
+
   if (errors) {
     console.log(errors);
   }
@@ -24,15 +28,16 @@ const Editor = () => {
                   name="title"
                   className="form-control form-control-lg"
                   placeholder="Article Title"
+                  defaultValue={articleUpdateData?.title}
                 />
                 {errors?.title && <span>{errors.title}</span>}
               </fieldset>
               <fieldset className="form-group">
-                <input name="description" type="text" className="form-control" placeholder="What's this article about?" />
+                <input name="description" type="text" className="form-control" placeholder="What's this article about?" defaultValue={articleUpdateData?.description} />
                 {errors?.description && <span>{errors.description}</span>}
               </fieldset>
               <fieldset className="form-group">
-                <textarea name="body" className="form-control" rows={8} placeholder="Write your article (in markdown)" />
+                <textarea name="body" className="form-control" rows={8} placeholder="Write your article (in markdown)" defaultValue={articleUpdateData?.body} />
                 {errors?.body && <span>{errors.body}</span>}
               </fieldset>
               <fieldset className="form-group">
