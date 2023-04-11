@@ -31,6 +31,7 @@ const App = () => {
             const username = formData.get("username");
             const errors = {};
             console.log('sadadssd')
+            console.log('sadadssd')
             try {
               const response = await instance.put(API_ENDPOINTS.USER.ROOT, {
                 user: {
