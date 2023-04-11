@@ -30,6 +30,7 @@ const App = () => {
             const bio = formData.get("bio");
             const username = formData.get("username");
             const errors = {};
+            console.log('sadadssd')
             try {
               const response = await instance.put(API_ENDPOINTS.USER.ROOT, {
                 user: {
