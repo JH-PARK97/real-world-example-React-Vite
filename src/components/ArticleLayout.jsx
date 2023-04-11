@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import ArticleMeta from "../components/ArticleMeta";
-import { clickFavoriteButton, clickUnFavoriteButton } from "../api/API";
+import { clickFavoriteButton, clickFollowButton, clickUnFavoriteButton, clickUnfollowButton } from "../api/API";
 
 const ArticleLayout = () => {
   const articleDetail = useLoaderData().data.article;
   const [favorite, setFavorite] = useState(articleDetail.favorited);
   const [count, setCount] = useState(articleDetail.favoritesCount);
+  const [following, setFollowing] = useState(articleDetail.author.following);
   console.log(articleDetail);
 
   const ClickFavoriteButton = async () => {
@@ -31,6 +32,25 @@ const ArticleLayout = () => {
     }
   };
 
+  const ClickFollowButton = async () => {
+    if (following) {
+      try {
+        const result = await clickUnfollowButton(articleDetail.author.username);
+        setFollowing(result.data.profile.following);
+      } catch (e) {
+        console.log(e);
+        return e;
+      }
+    } else {
+      try {
+        const result = await clickFollowButton(articleDetail.author.username);
+        setFollowing(result.data.profile.following);
+      } catch (e) {
+        console.log(e);
+        return e;
+      }
+    }
+  };
   return (
     <>
       <title>{articleDetail.title}</title>
@@ -38,7 +58,7 @@ const ArticleLayout = () => {
         <div className="banner">
           <div className="container">
             <h1>{articleDetail.title}</h1>
-            <ArticleMeta articleDetail={articleDetail} favorite={favorite} count={count} ClickFavoriteButton={ClickFavoriteButton} />
+            <ArticleMeta ClickFollowButton={ClickFollowButton} following={following} articleDetail={articleDetail} favorite={favorite} count={count} ClickFavoriteButton={ClickFavoriteButton} />
           </div>
         </div>
         <div className="container page">
@@ -59,7 +79,7 @@ const ArticleLayout = () => {
           </div>
           <hr />
           <div className="article-actions">
-            <ArticleMeta articleDetail={articleDetail} favorite={favorite} count={count} ClickFavoriteButton={ClickFavoriteButton} />
+            <ArticleMeta ClickFollowButton={ClickFollowButton} following={following} articleDetail={articleDetail} favorite={favorite} count={count} ClickFavoriteButton={ClickFavoriteButton} />
           </div>
           <div className="row">
             <div className="col-xs-12 col-md-8 offset-md-2">

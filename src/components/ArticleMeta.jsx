@@ -4,7 +4,7 @@ import FollowAuthorButton from "./FollowAuthorButton";
 import FavoriteArticleButton from "./FavoriteArticleButton";
 import DeleteArticleButton from "./DeleteArticleButton";
 
-const ArticleMeta = ({ articleDetail, favorite, count, ClickFavoriteButton }) => {
+const ArticleMeta = ({ articleDetail, favorite, count, ClickFavoriteButton, ClickFollowButton, following }) => {
   const { userProfile } = useOutletContext();
 
   const canUpdate = userProfile.username === articleDetail.author.username;
@@ -30,7 +30,9 @@ const ArticleMeta = ({ articleDetail, favorite, count, ClickFavoriteButton }) =>
         </span>
       ) : (
         <>
-          <FollowAuthorButton articleDetail={articleDetail}>&nbsp;&nbsp;</FollowAuthorButton>
+          <FollowAuthorButton articleDetail={articleDetail} ClickFollowButton={ClickFollowButton} following={following}>
+            &nbsp;&nbsp;
+          </FollowAuthorButton>
 
           <FavoriteArticleButton favorite={favorite} count={count} ClickFavoriteButton={ClickFavoriteButton} />
         </>

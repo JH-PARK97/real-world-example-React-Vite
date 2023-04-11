@@ -22,14 +22,15 @@ export const API_ENDPOINTS = {
   },
   TAGS: {
     ROOT: "tags",
-
   },
+
   USER: {
     ROOT: "user"
   },
+
   PROFILES: {
     ROOT: (username: string | number) => `profiles/${username}`, // Get user Profile
-    DETAIL: (username: string | number) => `profiles/${username}/follow`, // Follow, Unfollow User
+    FOLLOW: (username: string | number) => `profiles/${username}/follow`, // Follow, Unfollow User
   }
 };
 

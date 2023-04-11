@@ -42,17 +42,6 @@ export const getProfile = async () => {
   }
 };
 
-export const clickFollowButton = async (username) => {
-  try {
-    const response = await instance.post(API_ENDPOINTS.PROFILES.DETAIL(username));
-
-    return response;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
-
 export const clickFavoriteButton = async (slug) => {
   try {
     const response = await instance.post(API_ENDPOINTS.ARTICLE.FAVORITE.DETAIL(slug));
@@ -72,6 +61,28 @@ export const clickUnFavoriteButton = async (slug) => {
     const favorited = response.data.article.favorited;
     console.log("clickUnFavoriteButton 클릭");
     console.log(favorited);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const clickFollowButton = async (username) => {
+  try {
+    const response = await instance.post(API_ENDPOINTS.PROFILES.FOLLOW(username));
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const clickUnfollowButton = async (username) => {
+  try {
+    const response = await instance.delete(API_ENDPOINTS.PROFILES.FOLLOW(username));
+    console.log(response);
     return response;
   } catch (error) {
     console.log(error);

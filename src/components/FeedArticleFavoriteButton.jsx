@@ -5,7 +5,6 @@ const FeedArticleFavoriteButton = ({ favoritesCount, favorited, slug }) => {
   const [count, setCount] = useState(favoritesCount);
   const [favorite, setFavorite] = useState(favorited);
 
-  console.log(favorite);
 
   const ClickFavoriteButton = async () => {
     if (favorite) {
