@@ -198,7 +198,65 @@ const App = () => {
           element={<Register />}
         />
         <Route path={PAGE_ENDPOINTS.PROFILE} element={<Profile />} />
-        <Route path={PAGE_ENDPOINTS.EDITOR} element={<Editor />} />
+        <Route
+          path={PAGE_ENDPOINTS.EDITOR}
+          action={async (ctx) => {
+            const formData = await ctx.request.formData();
+            const title = formData.get("title");
+            const description = formData.get("description");
+            const body = formData.get("body");
+            const tags = formData.get("tags ");
+            const errors = {};
+
+            if (typeof title !== "string" || !title) {
+              errors.title = "title이 공백입니다.";
+            }
+
+            if (typeof description !== "string" || !description) {
+              errors.description = "description이 공백입니다.";
+            }
+
+            if (typeof body !== "string" || !body) {
+              errors.body = "body가 공백입니다.";
+            }
+            if (Object.keys(errors).length) {
+              return json(errors);
+            }
+
+            try {
+              const response = await instance.post(API_ENDPOINTS.ARTICLE.ROOT, {
+                article: {
+                  title,
+                  description,
+                  body,
+                  tags,
+                },
+              });
+              console.log("response : ", response);
+              if (response.status === 200) {
+                return redirect(`/article/${response.data.article.slug}`);
+              }
+            } catch (e) {
+              if (axios.isAxiosError(e)) {
+                switch (e.response.status) {
+                  case 422:
+                    const axiosError = e.response.data.errors;
+                    if (axiosError) {
+                      Object.keys(axiosError).map((key) => {
+                        if (axiosError[key]) {
+                          errors[key] = "중복되는 title입니다.";
+                        }
+                      });
+                      return json(errors);
+                    }
+                    break;
+                }
+              }
+            }
+            return null;
+          }}
+          element={<Editor />}
+        />
         <Route loader={getArticlesDetail} element={<Article />}>
           <Route path={PAGE_ENDPOINTS.ARTICLE} loader={getCommentsList} element={<ArticleComments />} />
         </Route>

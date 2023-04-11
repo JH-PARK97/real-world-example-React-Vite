@@ -7,7 +7,8 @@ import DeleteArticleButton from "./DeleteArticleButton";
 const ArticleMeta = ({ articleDetail, favorite, count, ClickFavoriteButton, ClickFollowButton, following }) => {
   const { userProfile } = useOutletContext();
 
-  const canUpdate = userProfile.username === articleDetail.author.username;
+  // const canUpdate = userProfile.username === articleDetail.author.username;
+  const canUpdate = true;
 
   return (
     <div className="article-meta">
@@ -22,7 +23,7 @@ const ArticleMeta = ({ articleDetail, favorite, count, ClickFavoriteButton, Clic
       </div>
       {canUpdate ? (
         <span>
-          <NavLink className="btn btn-outline-secondary btn-sm" to={`/editor/${slug}`}>
+          <NavLink className="btn btn-outline-secondary btn-sm" to={`/editor/${articleDetail.slug}`}>
             <i className="ion-edit" /> Edit Article
           </NavLink>
           &nbsp;&nbsp;

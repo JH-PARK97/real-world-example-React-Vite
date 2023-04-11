@@ -6,7 +6,6 @@ const Navbar = ({ userProfile }) => {
   const { isLogin } = useAuth((state) => ({
     isLogin: state.isLogin,
   }));
-  console.log(isLogin);
 
   return (
     <nav className="navbar navbar-light">

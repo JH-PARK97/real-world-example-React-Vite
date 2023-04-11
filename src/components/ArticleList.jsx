@@ -27,7 +27,7 @@ const ArticleList = ({ article }) => {
         }}
       >
         {article.articles?.map((article) => (
-          <div className="article-preview">
+          <div key={article.slug} className="article-preview">
             <div className="article-meta">
               <div className="info" style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ display: "flex" }}>

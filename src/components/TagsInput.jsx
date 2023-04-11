@@ -21,6 +21,7 @@ const TagsInput = ({}) => {
         type="text"
         className="form-control"
         placeholder="Enter tags"
+        name="tags"
       />
       <div className="tag-list">
         {/* {field.value.map((tag) => (
