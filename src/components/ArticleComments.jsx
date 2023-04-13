@@ -15,7 +15,6 @@ const ArticleComments = () => {
     setCommentList(data);
   };
 
-  console.log(commentsList);
   if (!isLogin) {
     return (
       <p>
@@ -27,7 +26,7 @@ const ArticleComments = () => {
     <>
       <ArticleCommentForm getComments={getComments} />
       {commentsList.map((comment) => (
-        <ArticleComment key={comment?.id} comment={comment} />
+        <ArticleComment getComments={getComments} key={comment?.id} comment={comment} />
       ))}
     </>
   );

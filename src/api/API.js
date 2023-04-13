@@ -92,3 +92,14 @@ export const postComment = async (slug, data) => {
     return e;
   }
 };
+
+export const deleteComment = async (slug, id) => {
+  try {
+    const response = await instance.delete(`${API_ENDPOINTS.ARTICLE.COMMENT.DELETE(slug, id)}`);
+    console.log(response);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};

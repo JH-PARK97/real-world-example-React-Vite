@@ -15,7 +15,7 @@ const ArticleCommentForm = ({ getComments }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await postComment(params.slug, commentValue);
+    await postComment(params.slug, commentValue);
     setCommentValue("");
     const commentList = await instance.get(`${API_ENDPOINTS.ARTICLE.COMMENT.ROOT(params.slug)}`);
     getComments(commentList.data.comments);
