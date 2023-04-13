@@ -8,12 +8,11 @@ const handleArticleSubmit = async (ctx) => {
   const title = formData.get("title");
   const description = formData.get("description");
   const body = formData.get("body");
-  const tags = formData.get("tags ");
+  const tagList = formData.get("tagList") ? JSON.parse(formData.get("tagList")) : [];
   const errors = {};
-
-  console.log("ctx.params : ", ctx.params.slug);
-  console.log(ctx);
-
+  
+  console.log(typeof tagList);
+  console.log(tagList);
   if (typeof title !== "string" || !title) {
     errors.title = "title이 공백입니다.";
   }
@@ -25,6 +24,7 @@ const handleArticleSubmit = async (ctx) => {
   if (typeof body !== "string" || !body) {
     errors.body = "body가 공백입니다.";
   }
+
   if (Object.keys(errors).length) {
     return json(errors);
   }
@@ -36,7 +36,7 @@ const handleArticleSubmit = async (ctx) => {
           title,
           description,
           body,
-          tags,
+          tagList,
         },
       });
       console.log("response : ", response);
@@ -67,10 +67,11 @@ const handleArticleSubmit = async (ctx) => {
           title,
           description,
           body,
-          tags,
+          tagList,
         },
       });
       console.log("response : ", response);
+      console.log(title, tagList, description, body);
       if (response.status === 200) {
         return redirect(`/article/${response.data.article.slug}`);
       }
@@ -88,6 +89,9 @@ const handleArticleSubmit = async (ctx) => {
               return json(errors);
             }
             break;
+
+          default:
+            console.log(e);
         }
       }
     }

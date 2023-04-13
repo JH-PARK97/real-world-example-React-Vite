@@ -7,8 +7,7 @@ import DeleteArticleButton from "./DeleteArticleButton";
 const ArticleMeta = ({ articleDetail, favorite, count, ClickFavoriteButton, ClickFollowButton, following }) => {
   const { userProfile } = useOutletContext();
 
-  // const canUpdate = userProfile.username === articleDetail.author.username;
-  const canUpdate = false;
+  const canUpdate = userProfile.username === articleDetail.author.username;
 
   return (
     <div className="article-meta">
@@ -27,7 +26,7 @@ const ArticleMeta = ({ articleDetail, favorite, count, ClickFavoriteButton, Clic
             <i className="ion-edit" /> Edit Article
           </NavLink>
           &nbsp;&nbsp;
-          <DeleteArticleButton />
+          <DeleteArticleButton articleSlug={articleDetail.slug} />
         </span>
       ) : (
         <>

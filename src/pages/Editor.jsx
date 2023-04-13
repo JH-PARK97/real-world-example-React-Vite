@@ -1,23 +1,44 @@
-import React from "react";
-import { Form, useActionData, useLoaderData } from "react-router-dom";
-import TagsInput from "../components/TagsInput";
-import { useFetcher } from "react-router-dom";
+import React, { useState } from "react";
+import { Form, useActionData, useFetcher, useLoaderData } from "react-router-dom";
 
 const Editor = () => {
   const errors = useActionData();
   const articleUpdateData = useLoaderData().data.article;
+  const [tags, setTags] = useState([]);
+  const [tagInputValue, setTagInputValue] = useState("");
   const fetcher = useFetcher();
+  const handleTagInputChange = (event) => {
+    setTagInputValue(event.target.value);
+  };
+
+  const handleTagInputKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setTags([...tags, tagInputValue]);
+      setTagInputValue("");
+    }
+  };
+
+  console.log(tags);
 
   if (errors) {
     console.log(errors);
   }
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    formData.append("tagList", JSON.stringify(tags));
+    fetcher.submit(formData, { method: "post" });
+  };
+
+  console.log(articleUpdateData);
   return (
     <div className="editor-page">
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
-            <Form method="post" replace>
+            <form method="post" onSubmit={onSubmit}>
               <fieldset className="form-group">
                 <input
                   style={{
@@ -41,12 +62,20 @@ const Editor = () => {
                 {errors?.body && <span>{errors.body}</span>}
               </fieldset>
               <fieldset className="form-group">
-                <TagsInput />
+                <input type="text" className="form-control" placeholder="Enter tags" value={tagInputValue} onChange={handleTagInputChange} onKeyDown={handleTagInputKeyDown} />
+                <div className="tag-list">
+                  {tags.map((tag) => (
+                    <span className="tag-default tag-pill">
+                      <i className="ion-close-round" onClick={() => setTags(tags.filter((item) => item !== tag))} />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </fieldset>
               <button className="btn btn-lg pull-xs-right btn-primary" type="submit">
                 Publish Article
               </button>
-            </Form>
+            </form>
           </div>
         </div>
       </div>

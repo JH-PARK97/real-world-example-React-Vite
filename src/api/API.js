@@ -33,7 +33,6 @@ export const getCommentsList = async ({ request, params }) => {
 export const getProfile = async () => {
   try {
     const response = await instance.get(API_ENDPOINTS.USER.ROOT);
-    console.log(response);
     return response;
   } catch (error) {
     if (error.response.status === 401) {
@@ -66,4 +65,10 @@ export const clickFollowButton = async (username, method) => {
     console.log(error);
     return error;
   }
+};
+
+export const DeleteArticle = async (slug) => {
+  const response = await instance.delete(`${API_ENDPOINTS.ARTICLE.DETAIL(slug)}`);
+  console.log(response);
+  return response;
 };
