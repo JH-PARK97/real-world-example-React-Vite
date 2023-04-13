@@ -3,12 +3,11 @@ import { Outlet, useLoaderData } from "react-router-dom";
 import ArticleMeta from "../components/ArticleMeta";
 import { clickFavoriteButton, clickFollowButton } from "../api/API";
 
-const ArticleLayout = () => {
+const ArticleLayout = ({ userProfile }) => {
   const articleDetail = useLoaderData().data.article;
   const [favorite, setFavorite] = useState(articleDetail.favorited);
   const [count, setCount] = useState(articleDetail.favoritesCount);
   const [following, setFollowing] = useState(articleDetail.author.following);
-  console.log(articleDetail);
 
   const ClickFavoriteButton = async () => {
     if (favorite) {
@@ -83,7 +82,7 @@ const ArticleLayout = () => {
           </div>
           <div className="row">
             <div className="col-xs-12 col-md-8 offset-md-2">
-              <Outlet />
+              <Outlet context={{ userProfile }} />
             </div>
           </div>
         </div>

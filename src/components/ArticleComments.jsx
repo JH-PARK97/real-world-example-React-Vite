@@ -1,13 +1,22 @@
-import React from "react";
-import { NavLink, useLoaderData } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useLoaderData, useOutletContext } from "react-router-dom";
 import ArticleComment from "./ArticleComment";
 import ArticleCommentForm from "./ArticleCommentForm";
+import useAuth from "../store/store";
 
 const ArticleComments = () => {
-  const commentsList = useLoaderData().data.comments;
-  const isAuth = true;
+  const data = useLoaderData().data.comments;
+  const [commentsList, setCommentList] = useState(data);
+  const { isLogin } = useAuth((state) => ({
+    isLogin: state.isLogin,
+  }));
 
-  if (!isAuth) {
+  const getComments = (data) => {
+    setCommentList(data);
+  };
+
+  console.log(commentsList);
+  if (!isLogin) {
     return (
       <p>
         <NavLink to="/login">Sign in</NavLink> or <NavLink to="/register">sign up</NavLink> to add comments on this article.
@@ -16,7 +25,7 @@ const ArticleComments = () => {
   }
   return (
     <>
-      <ArticleCommentForm />
+      <ArticleCommentForm getComments={getComments} />
       {commentsList.map((comment) => (
         <ArticleComment key={comment?.id} comment={comment} />
       ))}

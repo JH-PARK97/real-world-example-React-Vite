@@ -5,7 +5,7 @@ import Navbar from "./NavBar";
 import useAuth from "../store/store";
 
 const Layout = () => {
-  const userProfile = useLoaderData().data?.user;
+  const userProfile = useLoaderData().data?.user ? useLoaderData().data?.user : {};
   const location = useLocation();
   const { setIsLogin, isLogin } = useAuth((state) => ({
     setIsLogin: state.setIsLogin,

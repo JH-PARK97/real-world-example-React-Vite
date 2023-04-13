@@ -1,3 +1,4 @@
+import { json } from "react-router-dom";
 import { API_ENDPOINTS } from "../constants/constants";
 import instance from "../utils/interceptor";
 
@@ -24,10 +25,14 @@ export const getTagsList = async () => {
   return await instance.get(`${API_ENDPOINTS.TAGS.ROOT}`);
 };
 
-export const getCommentsList = async ({ request, params }) => {
-  const url = new URL(request.url);
-
-  return await instance.get(`${API_ENDPOINTS.ARTICLE.COMMENT.ROOT(params.slug)}`);
+export const getCommentsList = async ({ params }) => {
+  try {
+    const response = await instance.get(`${API_ENDPOINTS.ARTICLE.COMMENT.ROOT(params.slug)}`);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
 };
 
 export const getProfile = async () => {
@@ -67,8 +72,23 @@ export const clickFollowButton = async (username, method) => {
   }
 };
 
-export const DeleteArticle = async (slug) => {
+export const deleteArticle = async (slug) => {
   const response = await instance.delete(`${API_ENDPOINTS.ARTICLE.DETAIL(slug)}`);
   console.log(response);
   return response;
+};
+
+export const postComment = async (slug, data) => {
+  try {
+    const response = await instance.post(`${API_ENDPOINTS.ARTICLE.COMMENT.ROOT(slug)}`, {
+      comment: {
+        body: data,
+      },
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
 };

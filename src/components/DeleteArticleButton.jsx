@@ -1,13 +1,14 @@
 import React from "react";
 import { PAGE_ENDPOINTS } from "../constants/constants";
-import { DeleteArticle } from "../api/API";
-import { useNavigate } from "react-router-dom";
+import { deleteArticle } from "../api/API";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const DeleteArticleButton = ({ articleSlug }) => {
+
   const navigate = useNavigate();
-  console.log(articleSlug);
-  const clickDeleteArticleButton = () => {
-    DeleteArticle(articleSlug);
+
+  const clickdeleteArticleButton = () => {
+    deleteArticle(articleSlug);
     return navigate(PAGE_ENDPOINTS.ROOT);
   };
   return (
@@ -15,7 +16,7 @@ const DeleteArticleButton = ({ articleSlug }) => {
       type="button"
       className="btn btn-outline-danger btn-sm"
       onClick={() => {
-        clickDeleteArticleButton();
+        clickdeleteArticleButton();
       }}
     >
       <i className="ion-trash-a" /> Delete Article
