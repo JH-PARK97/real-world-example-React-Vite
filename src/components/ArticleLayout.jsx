@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import ArticleMeta from "../components/ArticleMeta";
 import { clickFavoriteButton, clickFollowButton } from "../api/API";
+import useAuth from "../store/store";
+import { PAGE_ENDPOINTS } from "../constants/constants";
 
 const ArticleLayout = ({ userProfile }) => {
   const articleDetail = useLoaderData().data.article;
@@ -9,7 +11,15 @@ const ArticleLayout = ({ userProfile }) => {
   const [count, setCount] = useState(articleDetail.favoritesCount);
   const [following, setFollowing] = useState(articleDetail.author.following);
 
+  const { isLogin } = useAuth();
+
+  const navigate = useNavigate();
+
   const ClickFavoriteButton = async () => {
+    if (isLogin === false) {
+      return navigate(PAGE_ENDPOINTS.AUTH.LOGIN);
+    }
+
     if (favorite) {
       try {
         const result = await clickFavoriteButton(articleDetail.slug, "delete");
@@ -32,6 +42,9 @@ const ArticleLayout = ({ userProfile }) => {
   };
 
   const ClickFollowButton = async () => {
+    if (isLogin === false) {
+      return navigate(PAGE_ENDPOINTS.AUTH.LOGIN);
+    }
     if (following) {
       try {
         const result = await clickFollowButton(articleDetail.author.username, "delete");

@@ -15,6 +15,7 @@ export const getArticlesList = async (ctx) => {
   url.searchParams.delete("pageNo");
   const qs = url.searchParams.toString();
   const apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}/${qs ? `?${qs}` : ""}${username ? `?author=${username}` : ""}`;
+
   return await instance.get(apiURL);
 };
 
@@ -39,10 +40,11 @@ export const getCommentsList = async ({ params }) => {
 export const getProfile = async () => {
   try {
     const response = await instance.get(API_ENDPOINTS.USER.ROOT);
+    console.log(response);
     return response;
   } catch (error) {
     if (error.response.status === 401) {
-      console.log("로그인 안한 상태");
+      console.log(error);
       return error;
     }
     return error;

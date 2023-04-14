@@ -1,11 +1,23 @@
 import React, { useState } from "react";
 import { clickFavoriteButton } from "../api/API";
+import useAuth from "../store/store";
+import { useNavigate } from "react-router-dom";
+import { PAGE_ENDPOINTS } from "../constants/constants";
 
 const FeedArticleFavoriteButton = ({ favoritesCount, favorited, slug }) => {
   const [count, setCount] = useState(favoritesCount);
   const [favorite, setFavorite] = useState(favorited);
 
+  const { isLogin } = useAuth((state) => ({
+    isLogin: state.isLogin,
+  }));
+
+  const navigate = useNavigate();
   const ClickFavoriteButton = async () => {
+    console.log(isLogin);
+    if (!isLogin) {
+      return navigate(PAGE_ENDPOINTS.AUTH.LOGIN);
+    }
     if (favorite) {
       try {
         const result = await clickFavoriteButton(slug, "delete");
