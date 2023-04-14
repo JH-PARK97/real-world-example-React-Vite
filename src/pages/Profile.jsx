@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useLoaderData, useParams } from "react-router-dom";
+import { NavLink, useLoaderData, useOutlet, useOutletContext, useParams } from "react-router-dom";
 import ArticleList from "../components/ArticleList";
 import instance from "../utils/interceptor";
 import { API_ENDPOINTS } from "../constants/constants";
 import FollowAuthorButton from "../components/FollowAuthorButton";
 
 const Profile = () => {
-  const canUpdateProfile = false;
-
-  const { data } = useLoaderData();
+  const { userProfile } = useOutletContext();
   const { username } = useParams();
+  const canUpdateProfile = userProfile.username === username;
+  const { data } = useLoaderData();
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
@@ -17,9 +17,10 @@ const Profile = () => {
     getUserNameArticles();
   }, []);
 
+  console.log(username);
+
   const getUserNameArticles = async () => {
     const response = await instance.get(`${`${API_ENDPOINTS.ARTICLE.ROOT}?author=${username}`}`);
-    console.log(response);
   };
 
   const getUserNameProfile = async () => {
@@ -53,12 +54,12 @@ const Profile = () => {
             <div className="articles-toggle">
               <ul className="nav nav-pills outline-active">
                 <li className="nav-item">
-                  <button type="button" className={"nav-link"}>
+                  <button type="button" className="nav-link ">
                     My Articles
                   </button>
                 </li>
                 <li className="nav-item">
-                  <button type="button" className={"nav-link"}>
+                  <button type="button" className="nav-link">
                     Favorited Articles
                   </button>
                 </li>
