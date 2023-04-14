@@ -6,19 +6,19 @@ import { API_ENDPOINTS } from "../constants/constants";
 import instance from "../utils/interceptor";
 
 const HomeLayout = () => {
-  const [articleType, setArticleType] = useState(null);
-  const tags = useLoaderData().data?.tags ?? [];
   const { isLogin } = useAuth((state) => ({
     isLogin: state.isLogin,
   }));
+  const tags = useLoaderData().data?.tags ?? [];
 
   const initialFilters = { tag: "", feed: false };
 
+  const [articleType, setArticleType] = useState(null);
   const [filters, setFilters] = useState({ initialFilters, feed: isLogin });
 
   useEffect(() => {
     setFilters({ initialFilters, feed: false });
-  }, [isLogin]);
+  }, []);
 
   const onTagClick = async (tag) => {
     setFilters({ initialFilters, tag });
@@ -47,12 +47,14 @@ const HomeLayout = () => {
 
   return (
     <div className="home-page">
-      <div className="banner">
-        <div className="container">
-          <h1 className="logo-font">conduit</h1>
-          <p>A place to share your knowledge.</p>
+      {!isLogin && (
+        <div className="banner">
+          <div className="container">
+            <h1 className="logo-font">conduit</h1>
+            <p>A place to share your knowledge.</p>
+          </div>
         </div>
-      </div>
+      )}
       <div className="container page">
         <div className="row">
           <div className="col-md-9">

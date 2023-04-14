@@ -8,7 +8,6 @@ const Home = () => {
 
   const tagsArticle = useOutletContext();
 
-  console.log("tagsArticle :", tagsArticle);
   return (
     <>
       <title>Home</title>

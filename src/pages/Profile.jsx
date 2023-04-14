@@ -6,13 +6,15 @@ import { API_ENDPOINTS } from "../constants/constants";
 import FollowAuthorButton from "../components/FollowAuthorButton";
 
 const Profile = () => {
-  const [filters, setFilters] = useState({ author: true, favorited: "" });
-  const { userProfile } = useOutletContext();
-  const { username } = useParams();
-  const canUpdateProfile = userProfile.username === username;
   const { data } = useLoaderData();
+  const { username } = useParams();
+  const { userProfile } = useOutletContext();
+
+  const [filters, setFilters] = useState({ author: true, favorited: "" });
   const [userData, setUserData] = useState({});
   const [articleType, setArticleType] = useState(data);
+
+  const canUpdateProfile = userProfile.username === username;
 
   useEffect(() => {
     getUserNameProfile();
