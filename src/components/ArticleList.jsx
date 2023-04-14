@@ -18,6 +18,7 @@ const ArticleList = ({ article }) => {
     navigate("/?" + searchParams.toString());
   };
 
+  console.log('article : ', article)
   return (
     <>
       <ul
@@ -26,7 +27,8 @@ const ArticleList = ({ article }) => {
           marginLeft: "-35px",
         }}
       >
-        {article.articles?.map((article) => (
+        
+        {article?.articles?.map((article) => (
           <div key={article.slug} className="article-preview">
             <div className="article-meta">
               <div className="info" style={{ display: "flex", justifyContent: "space-between" }}>
@@ -81,7 +83,7 @@ const ArticleList = ({ article }) => {
             </NavLink>
           </div>
         ))}
-        <Pagination limit={limit} totalCount={article.articlesCount} clickPageButton={clickPageButton} />
+        <Pagination limit={limit} totalCount={article?.articlesCount} clickPageButton={clickPageButton} />
       </ul>
     </>
   );

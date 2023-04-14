@@ -22,7 +22,7 @@ const App = () => {
         <Route path={PAGE_ENDPOINTS.SETTINGS} action={(ctx) => handleSettingsAction(ctx)} element={<Settings />} />
         <Route path={PAGE_ENDPOINTS.AUTH.LOGIN} action={(ctx) => handleLoginAction(ctx)} element={<Login />} />
         <Route path={PAGE_ENDPOINTS.AUTH.REGIS} action={(ctx) => handleRegisterAction(ctx)} element={<Register />} />
-        <Route path={PAGE_ENDPOINTS.PROFILE} element={<Profile />} />
+        <Route path={PAGE_ENDPOINTS.PROFILE} loader={getArticlesList} element={<Profile />} />
         <Route path={PAGE_ENDPOINTS.EDITOR} loader={getArticlesDetail} action={(ctx) => handleArticleSubmit(ctx)} element={<Editor />} />
         <Route loader={getArticlesDetail} element={<Article />}>
           <Route path={PAGE_ENDPOINTS.ARTICLE} loader={getCommentsList} element={<ArticleComments />} />

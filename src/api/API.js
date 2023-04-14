@@ -9,11 +9,12 @@ import instance from "../utils/interceptor";
  */
 export const getArticlesList = async (ctx) => {
   const url = new URL(ctx.request.url);
+  const username = ctx.params.username;
 
   // url에서 pageNo를 제거하여 API 호출할 때 offset만 이용할 수 있도록 함
   url.searchParams.delete("pageNo");
   const qs = url.searchParams.toString();
-  const apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}/${qs ? `?${qs}` : ""}`;
+  const apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}/${qs ? `?${qs}` : ""}${username ? `?author=${username}` : ""}`;
   return await instance.get(apiURL);
 };
 

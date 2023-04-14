@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import useAuth from "../store/store";
+import { PAGE_ENDPOINTS } from "../constants/constants";
 
 const Navbar = ({ userProfile }) => {
   const { isLogin } = useAuth((state) => ({
@@ -34,7 +35,7 @@ const Navbar = ({ userProfile }) => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to={`/@${userProfile?.username}`}>
+                <NavLink className="nav-link" to={`/profile/${userProfile?.username}`}>
                   <img style={{ width: 24, height: 24, marginRight: 4, borderRadius: "50%" }} src={userProfile?.image} />
                   {userProfile?.username}
                 </NavLink>
