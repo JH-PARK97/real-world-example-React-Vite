@@ -6,11 +6,13 @@ import { API_ENDPOINTS } from "../constants/constants";
 import FollowAuthorButton from "../components/FollowAuthorButton";
 
 const Profile = () => {
+  const [filters, setFilters] = useState({ author: true, favorited: "" });
   const { userProfile } = useOutletContext();
   const { username } = useParams();
   const canUpdateProfile = userProfile.username === username;
   const { data } = useLoaderData();
   const [userData, setUserData] = useState({});
+  const [articleType, setArticleType] = useState(data);
 
   useEffect(() => {
     getUserNameProfile();
@@ -24,6 +26,20 @@ const Profile = () => {
   const getUserNameProfile = async () => {
     const response = await instance.get(`${API_ENDPOINTS.PROFILES.ROOT(username)}`);
     setUserData(response.data.profile);
+  };
+
+  const clickMyArticlesButton = async () => {
+    setFilters({ author: true, favorited: "" });
+    const response = await instance.get(`${API_ENDPOINTS.ARTICLE.ROOT}?author=${username}`);
+    console.log(response.data);
+    setArticleType(response.data);
+  };
+
+  const clickFavoritedArticlesButton = async () => {
+    setFilters({ author: "", favorited: true });
+    const response = await instance.get(`${API_ENDPOINTS.ARTICLE.ROOT}?favorited=${username}`);
+    console.log(response.data);
+    setArticleType(response.data);
   };
   return (
     <div className="profile-page">
@@ -52,18 +68,18 @@ const Profile = () => {
             <div className="articles-toggle">
               <ul className="nav nav-pills outline-active">
                 <li className="nav-item">
-                  <button type="button" className="nav-link ">
+                  <button onClick={() => clickMyArticlesButton()} type="button" className={`nav-link` + (filters.author ? " active" : "")}>
                     My Articles
                   </button>
                 </li>
                 <li className="nav-item">
-                  <button type="button" className="nav-link">
+                  <button onClick={() => clickFavoritedArticlesButton()} type="button" className={`nav-link` + (filters.favorited ? " active" : "")}>
                     Favorited Articles
                   </button>
                 </li>
               </ul>
             </div>
-            <ArticleList article={data} />
+            <ArticleList article={articleType} />
           </div>
         </div>
       </div>

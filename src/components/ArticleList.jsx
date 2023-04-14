@@ -3,9 +3,8 @@ import { NavLink } from "react-router-dom";
 import FeedArticleFavoriteButton from "./FeedArticleFavoriteButton";
 import Pagination from "./Pagination";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../store/store";
 
-const ArticleList = ({ article, tagsArticle }) => {
+const ArticleList = ({ article }) => {
   const limit = 10;
   const navigate = useNavigate();
 
@@ -19,7 +18,9 @@ const ArticleList = ({ article, tagsArticle }) => {
     navigate("/?" + searchParams.toString());
   };
 
-  console.log(article);
+  if (article.articles.length === 0) {
+    return <p className="article-preview">No articles are here... yet.</p>;
+  }
   return (
     <>
       <ul

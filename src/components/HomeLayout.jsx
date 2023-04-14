@@ -17,7 +17,7 @@ const HomeLayout = () => {
   const [filters, setFilters] = useState({ initialFilters, feed: isLogin });
 
   useEffect(() => {
-    setFilters({ initialFilters, feed: isLogin });
+    setFilters({ initialFilters, feed: false });
   }, [isLogin]);
 
   const onTagClick = async (tag) => {
