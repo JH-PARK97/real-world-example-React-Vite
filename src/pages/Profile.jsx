@@ -17,10 +17,8 @@ const Profile = () => {
     getUserNameArticles();
   }, []);
 
-  console.log(username);
-
   const getUserNameArticles = async () => {
-    const response = await instance.get(`${`${API_ENDPOINTS.ARTICLE.ROOT}?author=${username}`}`);
+    await instance.get(`${`${API_ENDPOINTS.ARTICLE.ROOT}?author=${username}`}`);
   };
 
   const getUserNameProfile = async () => {

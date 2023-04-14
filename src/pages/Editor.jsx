@@ -20,7 +20,6 @@ const Editor = () => {
     }
   };
 
-  console.log(tags);
 
   if (errors) {
     console.log(errors);
@@ -33,7 +32,6 @@ const Editor = () => {
     fetcher.submit(formData, { method: "post" });
   };
 
-  console.log(articleUpdateData);
   return (
     <div className="editor-page">
       <div className="container page">

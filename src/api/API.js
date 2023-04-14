@@ -40,7 +40,6 @@ export const getCommentsList = async ({ params }) => {
 export const getProfile = async () => {
   try {
     const response = await instance.get(API_ENDPOINTS.USER.ROOT);
-    console.log(response);
     return response;
   } catch (error) {
     if (error.response.status === 401) {
@@ -54,9 +53,6 @@ export const getProfile = async () => {
 export const clickFavoriteButton = async (slug, method) => {
   try {
     const response = await instance[method](API_ENDPOINTS.ARTICLE.FAVORITE.DETAIL(slug));
-    const favorited = response.data.article.favorited;
-    console.log("clickFavoriteButton 클릭");
-    console.log(favorited);
     return response;
   } catch (error) {
     console.log(error);
@@ -67,7 +63,6 @@ export const clickFavoriteButton = async (slug, method) => {
 export const clickFollowButton = async (username, method) => {
   try {
     const response = await instance[method](API_ENDPOINTS.PROFILES.FOLLOW(username));
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -77,7 +72,6 @@ export const clickFollowButton = async (username, method) => {
 
 export const deleteArticle = async (slug) => {
   const response = await instance.delete(`${API_ENDPOINTS.ARTICLE.DETAIL(slug)}`);
-  console.log(response);
   return response;
 };
 
@@ -99,7 +93,6 @@ export const postComment = async (slug, data) => {
 export const deleteComment = async (slug, id) => {
   try {
     const response = await instance.delete(`${API_ENDPOINTS.ARTICLE.COMMENT.DELETE(slug, id)}`);
-    console.log(response);
     return response;
   } catch (e) {
     console.log(e);

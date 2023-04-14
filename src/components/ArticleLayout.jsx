@@ -16,7 +16,7 @@ const ArticleLayout = ({ userProfile }) => {
   const navigate = useNavigate();
 
   const ClickFavoriteButton = async () => {
-    if (isLogin === false) {
+    if (!isLogin) {
       return navigate(PAGE_ENDPOINTS.AUTH.LOGIN);
     }
 
@@ -42,7 +42,7 @@ const ArticleLayout = ({ userProfile }) => {
   };
 
   const ClickFollowButton = async () => {
-    if (isLogin === false) {
+    if (!isLogin) {
       return navigate(PAGE_ENDPOINTS.AUTH.LOGIN);
     }
     if (following) {

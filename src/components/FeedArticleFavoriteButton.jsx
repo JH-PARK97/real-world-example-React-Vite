@@ -14,14 +14,12 @@ const FeedArticleFavoriteButton = ({ favoritesCount, favorited, slug }) => {
 
   const navigate = useNavigate();
   const ClickFavoriteButton = async () => {
-    console.log(isLogin);
     if (!isLogin) {
       return navigate(PAGE_ENDPOINTS.AUTH.LOGIN);
     }
     if (favorite) {
       try {
         const result = await clickFavoriteButton(slug, "delete");
-        console.log(result);
         setFavorite(result.data.article.favorited);
         setCount(result.data.article.favoritesCount);
       } catch (e) {
@@ -31,7 +29,6 @@ const FeedArticleFavoriteButton = ({ favoritesCount, favorited, slug }) => {
     } else {
       try {
         const result = await clickFavoriteButton(slug, "post");
-        console.log(result);
         setFavorite(result.data.article.favorited);
         setCount(result.data.article.favoritesCount);
       } catch (e) {

@@ -1,12 +1,25 @@
 import React from "react";
 
-const PopularTags = ({ tags }) => {
+const PopularTags = ({ tags, onTagClick }) => {
+
+  
   return (
-    <div style={{}} className="sidebar">
+    <div
+      style={{
+        cursor: "pointer",
+      }}
+      className="sidebar"
+    >
       <p>Popular Tags</p>
       <div className="tag-list">
         {tags?.map((tag) => (
-          <a href="#" key={tag} className="tag-pill tag-default">
+          <a
+            onClick={() => {
+              onTagClick(tag);
+            }}
+            key={tag}
+            className="tag-pill tag-default"
+          >
             {tag}
           </a>
         ))}

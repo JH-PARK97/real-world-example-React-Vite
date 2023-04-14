@@ -1,17 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PopularTags from "../components/PopularTag";
 import { Outlet, useLoaderData } from "react-router-dom";
-import classNames from "classnames";
 import useAuth from "../store/store";
+import { API_ENDPOINTS } from "../constants/constants";
+import instance from "../utils/interceptor";
 
 const HomeLayout = () => {
+  const [articleType, setArticleType] = useState(null);
   const tags = useLoaderData().data?.tags ?? [];
-  const filters = {
-    tag: null,
-  };
   const { isLogin } = useAuth((state) => ({
     isLogin: state.isLogin,
   }));
+
+  const initialFilters = { tag: "", feed: false };
+
+  const [filters, setFilters] = useState({ initialFilters, feed: isLogin });
+
+  useEffect(() => {
+    setFilters({ initialFilters, feed: isLogin });
+  }, [isLogin]);
+
+  const onTagClick = async (tag) => {
+    setFilters({ initialFilters, tag });
+
+    const apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}/?tag=${tag}`;
+
+    const response = await instance.get(apiURL);
+    setArticleType(response.data);
+  };
+
+  const onFeedClick = async () => {
+    setFilters({ initialFilters, feed: true });
+    const apiURL = API_ENDPOINTS.ARTICLE.FEED;
+
+    const response = await instance.get(apiURL);
+    setArticleType(response.data);
+  };
+
+  const onGlobalFeedClick = async () => {
+    setFilters(initialFilters);
+    const apiURL = API_ENDPOINTS.ARTICLE.ROOT;
+
+    const response = await instance.get(apiURL);
+    setArticleType(response.data);
+  };
 
   return (
     <div className="home-page">
@@ -28,23 +60,13 @@ const HomeLayout = () => {
               <ul className="nav nav-pills outline-active">
                 {isLogin && (
                   <li className="nav-item">
-                    <button
-                      type="button"
-                      className={classNames("nav-link", {
-                        active: filters.feed,
-                      })}
-                    >
+                    <button type="button" className={`nav-link` + (filters.feed ? " active" : "")} onClick={() => onFeedClick()}>
                       Your Feed
                     </button>
                   </li>
                 )}
                 <li className="nav-item">
-                  <button
-                    type="button"
-                    className={classNames("nav-link", {
-                      active: !filters?.tag && !filters.feed,
-                    })}
-                  >
+                  <button onClick={onGlobalFeedClick} type="button" className={`nav-link` + (!filters?.tag && !filters.feed ? " active" : "")}>
                     Global Feed
                   </button>
                 </li>
@@ -55,10 +77,10 @@ const HomeLayout = () => {
                 )}
               </ul>
             </div>
-            <Outlet />
+            <Outlet context={articleType} />
           </div>
           <div className="col-md-3">
-            <PopularTags tags={tags} />
+            <PopularTags onTagClick={onTagClick} tags={tags} />
           </div>
         </div>
       </div>

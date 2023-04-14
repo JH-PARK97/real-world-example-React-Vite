@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import FeedArticleFavoriteButton from "./FeedArticleFavoriteButton";
 import Pagination from "./Pagination";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../store/store";
 
-const ArticleList = ({ article }) => {
+const ArticleList = ({ article, tagsArticle }) => {
   const limit = 10;
   const navigate = useNavigate();
-
 
   // Change page
   const clickPageButton = (pageNumber) => {
@@ -20,6 +19,7 @@ const ArticleList = ({ article }) => {
     navigate("/?" + searchParams.toString());
   };
 
+  console.log(article);
   return (
     <>
       <ul
@@ -28,7 +28,7 @@ const ArticleList = ({ article }) => {
           marginLeft: "-35px",
         }}
       >
-        {article?.articles?.map((article) => (
+        {article.articles.map((article) => (
           <div key={article.slug} className="article-preview">
             <div className="article-meta">
               <div className="info" style={{ display: "flex", justifyContent: "space-between" }}>

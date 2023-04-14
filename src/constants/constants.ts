@@ -15,6 +15,7 @@ export const API_ENDPOINTS = {
     FAVORITE: {
       DETAIL: (slug: string | number) => `articles/${slug}/favorite`
     },
+    FEED: 'articles/feed',
 
     COMMENT: {
       ROOT: (slug: string | number) => `articles/${slug}/comments`, // Get Comments From an Article

@@ -1,16 +1,19 @@
 import React from "react";
 import ArticleList from "../components/ArticleList";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import useAuth from "../store/store";
 
 const Home = () => {
   const article = useLoaderData().data;
 
+  const tagsArticle = useOutletContext();
+
+  console.log("tagsArticle :", tagsArticle);
   return (
     <>
       <title>Home</title>
 
-      <ArticleList article={article} />
+      <ArticleList article={tagsArticle ? tagsArticle : article} />
     </>
   );
 };
