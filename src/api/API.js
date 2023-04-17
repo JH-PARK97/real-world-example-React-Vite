@@ -1,4 +1,3 @@
-import { json } from "react-router-dom";
 import { API_ENDPOINTS } from "../constants/constants";
 import instance from "../utils/interceptor";
 
@@ -10,13 +9,21 @@ import instance from "../utils/interceptor";
 export const getArticlesList = async (ctx) => {
   const url = new URL(ctx.request.url);
   const username = ctx.params.username;
-
+  const feed = url.searchParams.get("feed");
+  let apiURL = "";
   // url에서 pageNo를 제거하여 API 호출할 때 offset만 이용할 수 있도록 함
   url.searchParams.delete("pageNo");
   const qs = url.searchParams.toString();
-  const apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}/${qs ? `?${qs}` : ""}${username ? `?author=${username}` : ""}`;
 
-  return await instance.get(apiURL);
+  if (!feed) {
+    apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}/${qs ? `?${qs}` : ""}${username ? `?author=${username}` : ""}`;
+  } else {
+    apiURL = `${API_ENDPOINTS.ARTICLE.FEED}/${qs ? `?${qs}` : ""}`;
+  }
+
+  console.log("getArticlesList");
+  const response = await instance.get(apiURL);
+  return response;
 };
 
 export const getArticlesDetail = async ({ params }) => {

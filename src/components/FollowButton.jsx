@@ -9,7 +9,7 @@ const FollowButton = ({ articleDetail, ClickFollowButton, following, username })
   const navigator = useNavigate();
 
   return (
-    <button type="button" onClick={() => (isLogin ? ClickFollowButton : navigator(PAGE_ENDPOINTS.AUTH.LOGIN))} className={"btn btn-sm action-btn" + (following ? " btn-secondary" : " btn-outline-secondary")}>
+    <button type="button" onClick={() => (isLogin ? ClickFollowButton() : navigator(PAGE_ENDPOINTS.AUTH.LOGIN))} className={"btn btn-sm action-btn" + (following ? " btn-secondary" : " btn-outline-secondary")}>
       <i className="ion-plus-round" />
       &nbsp; {following ? "Unfollow" : "Follow"} {articleDetail ? articleDetail.author.username : username}
     </button>

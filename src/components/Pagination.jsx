@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const Pagination = ({ limit, totalCount, clickPageButton }) => {
   const pageNumbers = [];
@@ -9,11 +9,11 @@ const Pagination = ({ limit, totalCount, clickPageButton }) => {
 
   return (
     <ul className="pagination">
-      {pageNumbers.map((number, idx) => (
+      {pageNumbers.map((number) => (
         <li key={number} className="page-item">
           <button
             className={"page-link"}
-            onClick={(e) => {
+            onClick={() => {
               clickPageButton(number);
             }}
           >

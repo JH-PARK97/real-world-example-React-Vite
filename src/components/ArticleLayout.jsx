@@ -42,6 +42,7 @@ const ArticleLayout = ({ userProfile }) => {
   };
 
   const ClickFollowButton = async () => {
+    console.log(following)
     if (!isLogin) {
       return navigate(PAGE_ENDPOINTS.AUTH.LOGIN);
     }
@@ -49,6 +50,7 @@ const ArticleLayout = ({ userProfile }) => {
       try {
         const result = await clickFollowButton(articleDetail.author.username, "delete");
         setFollowing(result.data.profile.following);
+      
       } catch (e) {
         console.log(e);
         return e;

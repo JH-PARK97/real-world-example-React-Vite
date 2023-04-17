@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PopularTags from "../components/PopularTag";
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet, useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import useAuth from "../store/store";
-import { API_ENDPOINTS } from "../constants/constants";
+import { API_ENDPOINTS, PAGE_ENDPOINTS } from "../constants/constants";
 import instance from "../utils/interceptor";
 
 const HomeLayout = () => {
+  const searchParams = new URLSearchParams();
+  const navigate = useNavigate();
   const { isLogin } = useAuth((state) => ({
     isLogin: state.isLogin,
   }));
@@ -14,6 +16,8 @@ const HomeLayout = () => {
   const initialFilters = { tag: "", feed: false };
 
   const [articleType, setArticleType] = useState(null);
+  const [qsTag, setQsTag] = useState(null);
+  const [qsFeed, setQsFeed] = useState(false);
   const [filters, setFilters] = useState({ initialFilters, feed: isLogin });
 
   useEffect(() => {
@@ -21,7 +25,11 @@ const HomeLayout = () => {
   }, []);
 
   const onTagClick = async (tag) => {
+    searchParams.append("tag", tag);
     setFilters({ initialFilters, tag });
+
+    setQsTag(searchParams.get("tag"));
+    navigate("/?" + searchParams.toString());
 
     const apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}/?tag=${tag}`;
 
@@ -30,18 +38,28 @@ const HomeLayout = () => {
   };
 
   const onFeedClick = async () => {
+    setQsTag(null);
+    setQsFeed(true);
+    searchParams.append("feed", true);
+
     setFilters({ initialFilters, feed: true });
     const apiURL = API_ENDPOINTS.ARTICLE.FEED;
-
+    console.log(searchParams.toString());
     const response = await instance.get(apiURL);
+    console.log("response.data feed : ", response.data);
+    navigate("/?" + searchParams.toString());
     setArticleType(response.data);
   };
 
   const onGlobalFeedClick = async () => {
+    setQsTag(null);
+    setQsFeed(false);
+
     setFilters(initialFilters);
     const apiURL = API_ENDPOINTS.ARTICLE.ROOT;
 
     const response = await instance.get(apiURL);
+    navigate(PAGE_ENDPOINTS.ROOT);
     setArticleType(response.data);
   };
 
@@ -62,7 +80,7 @@ const HomeLayout = () => {
               <ul className="nav nav-pills outline-active">
                 {isLogin && (
                   <li className="nav-item">
-                    <button type="button" className={`nav-link` + (filters.feed ? " active" : "")} onClick={() => onFeedClick()}>
+                    <button type="button" className={`nav-link` + (filters.feed ? " active" : "")} onClick={onFeedClick}>
                       Your Feed
                     </button>
                   </li>
@@ -79,7 +97,7 @@ const HomeLayout = () => {
                 )}
               </ul>
             </div>
-            <Outlet context={articleType} />
+            <Outlet context={{ qsTag, articleType, qsFeed }} />
           </div>
           <div className="col-md-3">
             <PopularTags onTagClick={onTagClick} tags={tags} />
