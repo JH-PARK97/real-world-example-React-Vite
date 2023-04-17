@@ -21,7 +21,25 @@ export const getArticlesList = async (ctx) => {
     apiURL = `${API_ENDPOINTS.ARTICLE.FEED}/${qs ? `?${qs}` : ""}`;
   }
 
-  console.log("getArticlesList");
+  const response = await instance.get(apiURL);
+  return response;
+};
+
+export const getProfileArticlesList = async (ctx) => {
+  const url = new URL(ctx.request.url);
+  const username = ctx.params.username;
+  const author = url.searchParams.get("author");
+  const favorited = url.searchParams.get("favorited");
+  let apiURL = "";
+  url.searchParams.delete("pageNo");
+  url.searchParams.delete("author");
+  url.searchParams.delete("favorited");
+  const qs = url.searchParams.toString();
+  if (author) {
+    apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}?author=${username}&${qs ? `${qs}` : ""}`;
+  } else {
+    apiURL = `${API_ENDPOINTS.ARTICLE.ROOT}?favorited=${username}&${qs ? `${qs}` : ""}`;
+  }
   const response = await instance.get(apiURL);
   return response;
 };

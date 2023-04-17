@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useLoaderData, useOutlet, useOutletContext, useParams } from "react-router-dom";
+import { NavLink, useLoaderData, useNavigate, useOutlet, useOutletContext, useParams, useSearchParams } from "react-router-dom";
 import ArticleList from "../components/ArticleList";
 import instance from "../utils/interceptor";
 import { API_ENDPOINTS } from "../constants/constants";
@@ -8,22 +8,21 @@ import FollowAuthorButton from "../components/FollowAuthorButton";
 const Profile = () => {
   const { data } = useLoaderData();
   const { username } = useParams();
+  const [searchParams] = useSearchParams();
   const { userProfile } = useOutletContext();
+  const navigator = useNavigate();
 
-  const [filters, setFilters] = useState({ author: true, favorited: "" });
   const [userData, setUserData] = useState({});
   const [articleType, setArticleType] = useState(data);
+  const [myArticles, setMyArticles] = useState(searchParams.get("author"));
+  const [favoritedArticles, setFavoritedArticles] = useState(searchParams.get("favorited"));
 
   const canUpdateProfile = userProfile.username === username;
 
   useEffect(() => {
     getUserNameProfile();
-    getUserNameArticles();
-  }, []);
-
-  const getUserNameArticles = async () => {
-    await instance.get(`${`${API_ENDPOINTS.ARTICLE.ROOT}?author=${username}`}`);
-  };
+    setArticleType(data);
+  }, [data]);
 
   const getUserNameProfile = async () => {
     const response = await instance.get(`${API_ENDPOINTS.PROFILES.ROOT(username)}`);
@@ -31,18 +30,24 @@ const Profile = () => {
   };
 
   const clickMyArticlesButton = async () => {
-    setFilters({ author: true, favorited: "" });
+    setMyArticles(true);
+    setFavoritedArticles(false);
+    navigator(`/profile/${username}/?author=${true}`);
+
     const response = await instance.get(`${API_ENDPOINTS.ARTICLE.ROOT}?author=${username}`);
-    console.log(response.data);
+
     setArticleType(response.data);
   };
 
   const clickFavoritedArticlesButton = async () => {
-    setFilters({ author: "", favorited: true });
+    setMyArticles(false);
+    setFavoritedArticles(true);
+    navigator(`/profile/${username}/?favorited=${true}`);
+
     const response = await instance.get(`${API_ENDPOINTS.ARTICLE.ROOT}?favorited=${username}`);
-    console.log(response.data);
     setArticleType(response.data);
   };
+
   return (
     <div className="profile-page">
       <div className="user-info">
@@ -70,18 +75,18 @@ const Profile = () => {
             <div className="articles-toggle">
               <ul className="nav nav-pills outline-active">
                 <li className="nav-item">
-                  <button onClick={() => clickMyArticlesButton()} type="button" className={`nav-link` + (filters.author ? " active" : "")}>
+                  <button onClick={() => clickMyArticlesButton()} type="button" className={`nav-link` + (myArticles ? " active" : "")}>
                     My Articles
                   </button>
                 </li>
                 <li className="nav-item">
-                  <button onClick={() => clickFavoritedArticlesButton()} type="button" className={`nav-link` + (filters.favorited ? " active" : "")}>
+                  <button onClick={() => clickFavoritedArticlesButton()} type="button" className={`nav-link` + (favoritedArticles ? " active" : "")}>
                     Favorited Articles
                   </button>
                 </li>
               </ul>
             </div>
-            <ArticleList article={articleType} />
+            <ArticleList article={articleType} myArticles={myArticles} username={username} favoritedArticles={favoritedArticles} />
           </div>
         </div>
       </div>

@@ -4,10 +4,10 @@ import FeedArticleFavoriteButton from "./FeedArticleFavoriteButton";
 import Pagination from "./Pagination";
 import { useNavigate } from "react-router-dom";
 
-const ArticleList = ({ article, qsTag, qsFeed }) => {
+const ArticleList = ({ article, qsTag, qsFeed, myArticles, username, favoritedArticles }) => {
   const limit = 10;
   const navigate = useNavigate();
-  console.log(qsFeed);
+
   // Change page
   const clickPageButton = (pageNumber) => {
     // 페이지 버튼 클릭시 URLSearchParams를 이용해서 URL에 queryString으로 parameter를 붙여줌
@@ -17,6 +17,16 @@ const ArticleList = ({ article, qsTag, qsFeed }) => {
       searchParams.append("tag", qsTag);
     } else if (qsFeed) {
       searchParams.append("feed", true);
+    } else if (myArticles) {
+      searchParams.append("author", username);
+      searchParams.append("pageNo", pageNumber.toString());
+      searchParams.append("offset", (limit * (pageNumber - 1)).toString());
+      return navigate("?" + searchParams.toString());
+    } else if (favoritedArticles) {
+      searchParams.append("favorited", username);
+      searchParams.append("pageNo", pageNumber.toString());
+      searchParams.append("offset", (limit * (pageNumber - 1)).toString());
+      return navigate("?" + searchParams.toString());
     }
     searchParams.append("pageNo", pageNumber.toString());
     searchParams.append("offset", (limit * (pageNumber - 1)).toString());
